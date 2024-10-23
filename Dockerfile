@@ -1,23 +1,29 @@
 # Debian Based Docker
 FROM debian:latest
 
+# Update the package list and upgrade the existing packages
 RUN apt update && apt upgrade -y
 
-# Installing Packages
-RUN apt install git curl python3-pip ffmpeg -y
+# Install necessary packages
+RUN apt install -y git curl python3-pip ffmpeg
 
-# Installing Pip Packages
-RUN pip3 install -U pip
+# Upgrade pip to the latest version
+RUN pip3 install --upgrade pip
 
-# Copying Requirements
+# Copy the requirements file into the container
 COPY requirements.txt /requirements.txt
 
-# Installing Requirements
-RUN cd /
-RUN pip3 install -U -r requirements.txt
+# Install Python dependencies from requirements.txt
+RUN pip3 install --upgrade -r /requirements.txt
+
+# Create the application directory
 RUN mkdir /RadioPlayerV3
+
+# Set the working directory
 WORKDIR /RadioPlayerV3
+
+# Copy the start script into the container
 COPY start.sh /start.sh
 
-# Running Radio Player Bot
+# Set the start script as the command to run the bot
 CMD ["/bin/bash", "/start.sh"]
